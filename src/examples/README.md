@@ -1,4 +1,6 @@
-* Examples
+# Examples
+
+***
 
 This folder contain some examples of pyQt4.
 

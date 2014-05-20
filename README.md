@@ -1,6 +1,8 @@
-Gamma Games IHC
+# Gamma Games IHC
 
-* Installing pyQt4 in debian:
+***
+
+## Installing pyQt4 in debian:
 
 Make sure you have all the tools:
 
