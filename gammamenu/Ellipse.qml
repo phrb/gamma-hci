@@ -4,7 +4,7 @@ Path {
     id: p
     property real width: 200
     property real height: 200
-    property real margin: 150
+    property real margin: 50
     property real cx: width / 2
     property real cy: height / 2
     property real rx: width / 2 - margin

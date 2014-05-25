@@ -6,6 +6,20 @@ Rectangle {
     height: 720
     color: "black"
 
+    Image {
+        id: preview
+        signal changeGame(string previewSource)
+        onChangeGame: {
+            source = previewSource
+        }
+        width: screen.width * 0.4
+        height: screen.height * 0.4
+        y: screen.height * 0.075
+        anchors.horizontalCenter: screen.horizontalCenter
+    }
+
+
+
     PathView {
         id: view
 
@@ -24,7 +38,8 @@ Rectangle {
         highlightRangeMode: PathView.StrictlyEnforceRange
 
         width: parent.width * 0.9
-        height: parent.height * 0.8
+        height: parent.height * 0.4
+        y: parent.height * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
 
         model: GameModel {}
@@ -33,12 +48,13 @@ Rectangle {
             objectName: name
             width: screen.width/10.0 + selectionBorder
             height: screen.height/10.0 + selectionBorder
-            scale: 4.0 * y / parent.height
+            scale: 4*y/view.y < 0.75 ? 0.75 : 4*y/view.y
             color:"transparent"
             z: y
             smooth: true
-            opacity: scale / 2.0
+            opacity: scale / 2.0 < 0.2 ? 0.2 : scale / 2.0
             property int selectionBorder: 4
+            property string previewSource: imgSource2
 
             Image {
                 id: img
@@ -52,7 +68,6 @@ Rectangle {
                 State {
                     name: "SELECTED"
                     PropertyChanges { target: game; border.color: "red"; border.width : selectionBorder}
-                    StateChangeScript { name: "myScript"; script: console.log(game.objectName); }
                 },
                 State {
                     name: "UNSELECTED"
@@ -61,6 +76,8 @@ Rectangle {
             ]
 
             state: (parent.currentItem === this || (parent.currentItem === null && index === 0)) ? "SELECTED" : "UNSELECTED"
+            onStateChanged: if (state === "SELECTED") preview.changeGame(game.previewSource)
         }
+
     }
 }
