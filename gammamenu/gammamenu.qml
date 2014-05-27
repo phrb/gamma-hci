@@ -75,7 +75,7 @@ Rectangle {
                 }
             ]
 
-            state: (parent.currentItem === this || (parent.currentItem === null && index === 0)) ? "SELECTED" : "UNSELECTED"
+            state: game.PathView.isCurrentItem ? "SELECTED" : "UNSELECTED"
             onStateChanged: if (state === "SELECTED") preview.changeGame(game.previewSource)
         }
 
