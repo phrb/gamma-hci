@@ -42,7 +42,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         currentIndex: 0
 
-        model: GameModel {}
+        model: GameList {}
         delegate: Rectangle {
             id: game
             objectName: name

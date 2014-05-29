@@ -9,4 +9,3 @@ Loader {
     source: menuSource
     property string menuSource: "Menu.qml"
 }
-

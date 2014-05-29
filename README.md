@@ -1,21 +1,8 @@
 # Gamma Games IHC
 
-## Setting Up pyQt4 in Debian:
+We are using Qt5 and QtCreator in this project.
 
-Simple steps to setup a minimal
-development environment for our
-project:
-
-Make sure you have all the tools:
-
-    $ sudo apt-get install build-essential
-
-Then, install pyQt4:
-
-    $ sudo apt-get install pyqt4-dev-tools
-
-Then QtDesigner to speed things up (allegedly):
-
-    $ sudo apt-get install qt4-designer
+Check your distro's package manager for information
+on packages or installation procedures.
 
 ###
