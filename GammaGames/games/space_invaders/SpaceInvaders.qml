@@ -1,5 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Particles 2.0
+import QtMultimedia 5.0
+
 import "../../api"
 
 /*
@@ -108,8 +110,16 @@ GammaGame {
             }
     }
 
+    SoundEffect{
+        id: shoot
+        source: "efeitos_sonoros/shoot.wav"
+    }
+
     function button1(){
-        console.log("button1 remaped!")
+        shoot.play()
+
+      var newObject = Qt.createComponent("Tiro.qml")
+        newObject.createObject(game0, {"x": ship.x, "y": ship.y});
     }
 
     ParticleSystem {
@@ -140,11 +150,6 @@ GammaGame {
         y: parent.height * 0.8
         x: parent.width * 0.475
     }
-
-    Keys.onLeftPressed: ship.x -= 10
-    Keys.onRightPressed: ship.x += 10
-    Keys.onDownPressed: ship.y += 0
-    Keys.onUpPressed: ship.y -= 0
 
     Timer {
             interval: 10; running: true; repeat: true

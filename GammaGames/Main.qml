@@ -7,5 +7,6 @@ Loader {
     height: Screen.height*0.8
     focus: true
     source: menuSource
+    property int lastChosenIndex: 0
     property string menuSource: "api/Menu.qml"
 }

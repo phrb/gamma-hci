@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtMultimedia 5.0
 
 Rectangle {
     id: screen
@@ -7,17 +8,41 @@ Rectangle {
     height: sceneLoader.height
     color: "black"
     property int rotate_time: 3
+
     Timer{
-        interval: rotate_time * 1000; running: true;
-        repeat: true;
+        id: rotateTimer
+        interval: rotate_time * 1000
+        running: true
+        repeat: true
 
         onTriggered: {
             view.decrementCurrentIndex()
         }
     }
+<<<<<<< HEAD
     AnimatedImage {
-        id: preview
+=======
 
+    Timer{
+        id: chooseTimer
+        interval: 1500
+        running: false
+        repeat: false
+
+        onTriggered: {
+            sceneLoader.source = view.currentItem.gameFile
+        }
+    }
+
+    SoundEffect {
+        id: playSound
+        source: "menu.wav"
+    }
+
+    Image {
+>>>>>>> fce7ce9d2600041d365e8217c208cc9f5f5c3261
+        id: preview
+        z: 1000
         signal changeGame(string previewSource)
         onChangeGame: {
             source = previewSource
@@ -37,7 +62,26 @@ Rectangle {
         Keys.onLeftPressed: decrementCurrentIndex()
         Keys.onRightPressed: incrementCurrentIndex()
         Keys.onEscapePressed: Qt.quit()
-        Keys.onSpacePressed: { sceneLoader.source = currentItem.gameFile }
+        Keys.onSpacePressed: {
+            playSound.play()
+            focus = false
+            rotateTimer.stop()
+            anim.start()
+        }
+
+        ParallelAnimation {
+            id: anim
+            running: false
+            NumberAnimation { target: preview; property: "width"; to: screen.width; duration: 1000 }
+            NumberAnimation { target: preview; property: "height"; to: screen.height; duration: 1000 }
+            AnchorAnimation { duration: 1000 }
+            NumberAnimation { target: preview; property: "y"; to: 0; duration: 1000 }
+
+            onStopped: {
+                sceneLoader.lastChosenIndex = view.currentIndex
+                sceneLoader.source = view.currentItem.gameFile
+            }
+        }
 
         path: Ellipse {
             width: view.width
@@ -52,7 +96,7 @@ Rectangle {
         height: parent.height * 0.4
         y: parent.height * 0.5
         anchors.horizontalCenter: parent.horizontalCenter
-        currentIndex: 0
+        currentIndex: sceneLoader.lastChosenIndex
 
         model: GameList {}
         delegate: Rectangle {
