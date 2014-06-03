@@ -50,6 +50,6 @@ Rectangle {
         }
     }
     Keys.onEscapePressed: escape_key()
-    Keys.onDigit0Pressed: button1() // Digit0: Provisory bindings for Button1.
+    Keys.onSpacePressed: button1() // Digit0: Provisory bindings for Button1.
     Keys.onDigit1Pressed: button2() // Digit1: Provisory bindings for Button2.
 }

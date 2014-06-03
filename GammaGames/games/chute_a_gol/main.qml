@@ -5,27 +5,30 @@ import "../../api"
 GammaGame {
 
     id: fut
+
+    function button1() {
+        if (intensidade_remate.rodar === true){
+            intensidade_remate.rodar = false
+            penalty.intensidade = intensidade_remate.intensidade
+            console.log("Intensidade: " + intensidade_remate.intensidade)
+            penalty.rodar = true
+            jogador_placar.gol = penalty.gol
+        } else if (altura_remate.rodar === true) {
+            altura_remate.rodar = false
+            direcao_remate.rodar = true
+            penalty.altura = altura_remate.altura
+            console.log("Altura: " + altura_remate.altura)
+        } else if (direcao_remate.rodar === true){
+            intensidade_remate.rodar = true
+            direcao_remate.rodar = false
+            penalty.direcao = direcao_remate.direcao
+            console.log("Direcao: " + direcao_remate.direcao)
+        }
+    }
+
     MouseArea {
         anchors.fill: parent
-        onClicked: {
-            if (intensidade_remate.rodar === true){
-                intensidade_remate.rodar = false
-                penalty.intensidade = intensidade_remate.intensidade
-                console.log("Intensidade: " + intensidade_remate.intensidade)
-                penalty.rodar = true
-                jogador_placar.gol = penalty.gol
-            } else if (altura_remate.rodar === true) {
-                altura_remate.rodar = false
-                direcao_remate.rodar = true
-                penalty.altura = altura_remate.altura
-                console.log("Altura: " + altura_remate.altura)
-            } else if (direcao_remate.rodar === true){
-                intensidade_remate.rodar = true
-                direcao_remate.rodar = false
-                penalty.direcao = direcao_remate.direcao
-                console.log("Direcao: " + direcao_remate.direcao)
-            }
-        }
+        onClicked: button1()
     }
     // Criando o campo
     Item{
