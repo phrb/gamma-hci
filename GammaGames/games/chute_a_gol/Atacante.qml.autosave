@@ -1,0 +1,32 @@
+import QtQuick 2.2
+
+Rectangle{
+    id: atacante
+    width: 60
+    height: 60
+    z: 0
+    color: "transparent"
+    property string equipa: "imagens/jogador_1.png"
+    
+    Image {
+        id: imagem_brasil
+        width: 60
+        height: 60
+        source: "imagens/jogador12.svg"
+    }
+    RotationAnimation on rotation {to: 45; duration: 500; }
+    NumberAnimation on x {id:anib; to:0; duration: 2000}
+    
+    onXChanged: {
+        console.log("brasilx:" + brasil.x)
+        console.log("brasily:" + brasil.y)
+        console.log("argentinax:" + argentina.x)
+        console.log("argentinay:" + argentina.y)
+        var distanciaX = Math.abs(brasil.x - argentina.x)
+        var distanciaY = Math.abs(brasil.y - argentina.y)
+        if(distanciaX * 2 < (brasil.width + argentina.width) && distanciaY * 2 < (brasil.height + argentina.height)){
+            ania.stop()
+            anib.stop()
+        }
+    }
+}

@@ -18,10 +18,10 @@ import QtQuick 2.2
  */
 Rectangle {
     property bool key_pressed: false
-    property int timeout_seconds: 15
+    property int timeout_seconds: 10
 
     function escape_key (){
-        sceneLoader.source = sceneLoader.menuSource;
+        sceneLoader.source = "../" + sceneLoader.menuSource;
     }
     function button1(){} // Does nothing in an empty game.
     function button2(){} // Does nothing in an empty game.
@@ -37,7 +37,7 @@ Rectangle {
 
         onTriggered: {
             if ( !key_pressed ){
-                sceneLoader.source = sceneLoader.menuSource
+                sceneLoader.source = "../" + sceneLoader.menuSource
             }
             else{
                 key_pressed = false;
