@@ -19,7 +19,7 @@ Item {
         height: 25
         source: "imagens/bola.png"
         z:1
-        y: altura.height
+        y: (altura.height - seletor.height)/2
         x: (altura.width - seletor.width)/2
         SequentialAnimation on y{
             id: animacao
@@ -41,7 +41,7 @@ Item {
     function reiniciar(){
         raiz.altura = 0
         raiz.rodar = true
-        seletor.y = altura.height
+        seletor.y = (altura.height - seletor.height)/2
     }
 }
 
