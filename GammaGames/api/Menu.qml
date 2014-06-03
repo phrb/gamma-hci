@@ -15,11 +15,14 @@ Rectangle {
             view.decrementCurrentIndex()
         }
     }
-    Image {
+    AnimatedImage {
         id: preview
 
         signal changeGame(string previewSource)
-        onChangeGame: source = previewSource
+        onChangeGame: {
+            source = previewSource
+            playing = true
+        }
         width: screen.width * 0.4
         height: screen.height * 0.4
         y: screen.height * 0.075
@@ -67,7 +70,7 @@ Rectangle {
             property string previewSource: previewImage
             property string gameFile: file
 
-            Image {
+            AnimatedImage {
                 width: parent.width - parent.selectionBorder
                 height: parent.height - parent.selectionBorder
                 source: menuImage
