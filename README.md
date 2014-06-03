@@ -7,7 +7,7 @@ instalação dessas dependências.
 ## Estrutura dos diretórios
 
 A pasta principal do projeto é a `GammaGames`. A pasta `api`
-contém o código para o menu principal da aplicação, e a classe
+contém o código para o menu principal da aplicação e a classe
 **GammaGame**, que é a base para implementação de novos jogos.
 
 A pasta `games` contém os jogos já implementados, que testaremos
