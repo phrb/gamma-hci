@@ -38,12 +38,9 @@ Item {
         }
     }
 
-    //Teste
-    /*MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            animacao.stop()
-            raiz.direcao = seletor.x
-        }
-    }*/
+    function reiniciar(){
+        raiz.direcao = 0
+        raiz.rodar = false
+        seletor.x = (direcao.width - seletor.width)/2
+    }
 }

@@ -37,6 +37,12 @@ Item {
             raiz.altura = (aux >= 90 ? 1 : 0)
         }
     }
+
+    function reiniciar(){
+        raiz.altura = 0
+        raiz.rodar = true
+        seletor.y = altura.height
+    }
 }
 
 

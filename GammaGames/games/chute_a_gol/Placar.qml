@@ -11,7 +11,7 @@ Rectangle {
     property string texto: "Jogador"
     property int golos_marcados: 0
     property int golos_falhados: 0
-    property int gol: 1
+    property int penaltisMarcados: 0
 
     Rectangle {
         id: equipa
@@ -205,11 +205,15 @@ Rectangle {
             }
         }
     ]
-    onGolChanged: {
-        if(placar.gol){
+
+    function atualizacao(gol) {
+        console.log("gol: " + gol)
+        if(gol){
             placar.golos_marcados++
+            console.log("golos_marcados: " + placar.golos_marcados)
         }else{
             placar.golos_falhados++
+            console.log("golos_falhados: " + placar.golos_falhados)
         }
         if (placar.state == "placar0") {
             placar.state = "placar1"
@@ -229,35 +233,43 @@ Rectangle {
         }
     }
 
-    // Testando o placar
-    /*MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            var gol = Math.ceil((Math.random()*2)) > 1 ? true : false
-            console.log(gol)
-            if(gol){
-                placar.golos_marcados++
-            }else{
-                placar.golos_falhados++
-            }
-            if (placar.state == "placar0") {
-                placar.state = "placar1"
-                status1.gol = gol
-            }else if (placar.state == "placar1") {
-                placar.state = "placar2"
-                status2.gol = gol
-            }else if (placar.state == "placar2") {
-                placar.state = "placar3"
-                status3.gol = gol
-            } else if (placar.state == "placar3") {
-                placar.state = "placar4"
-                status4.gol = gol
-            } else if (placar.state == "placar4") {
-                placar.state = "placar5"
-                status5.gol = gol
+    function incrementaPenaltisMarcados() {
+        placar.penaltisMarcados++
+    }
+
+    function reiniciar(){
+        placar.state = "placar0"
+        placar.texto = "Jogador"
+        placar.golos_marcados = 0
+        placar.golos_falhados = 0
+        placar.penaltisMarcados = 0
+        status1.color = "grey"
+        status1.gol = false
+        status2.color = "grey"
+        status2.gol = false
+        status3.color = "grey"
+        status3.gol = false
+        status4.color = "grey"
+        status4.gol = false
+        status5.color = "grey"
+        status5.gol = false
+    }
+
+    onPenaltisMarcadosChanged: {
+        if (placar.penaltisMarcados < 5) {
+            campo.novoPenalty()
+            computador_placar.atualizacao(Math.ceil((Math.random()*2)) > 1 ? true : false)
+        } else {
+            computador_placar.atualizacao(Math.ceil((Math.random()*2)) > 1 ? true : false)
+            if (jogador_placar.golos_marcados > computador_placar.golos_marcados){
+                sair.texto = "Venceste!"
+            } else if (jogador_placar.golos_marcados < computador_placar.golos_marcados){
+                sair.texto = "Perdeste!"
             } else {
-                Qt.quit()
+                sair.texto = "Empataste!"
             }
+            campo.novoPenalty()
+            campo.state = "ResultadoFinal"
         }
-    }*/
+    }
 }

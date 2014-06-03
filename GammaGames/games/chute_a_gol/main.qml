@@ -7,22 +7,27 @@ GammaGame {
     id: fut
 
     function button1() {
-        if (intensidade_remate.rodar === true){
-            intensidade_remate.rodar = false
-            penalty.intensidade = intensidade_remate.intensidade
-            console.log("Intensidade: " + intensidade_remate.intensidade)
-            penalty.rodar = true
-            jogador_placar.gol = penalty.gol
-        } else if (altura_remate.rodar === true) {
-            altura_remate.rodar = false
-            direcao_remate.rodar = true
-            penalty.altura = altura_remate.altura
-            console.log("Altura: " + altura_remate.altura)
-        } else if (direcao_remate.rodar === true){
-            intensidade_remate.rodar = true
-            direcao_remate.rodar = false
-            penalty.direcao = direcao_remate.direcao
-            console.log("Direcao: " + direcao_remate.direcao)
+        if (campo.state === "ResultadoFinal"){
+            campo.state = "MarcacaoDePenaltis"
+            jogador_placar.reiniciar()
+            computador_placar.reiniciar()
+        } else {
+            if (intensidade_remate.rodar === true){
+                intensidade_remate.rodar = false
+                penalty.intensidade = intensidade_remate.intensidade
+                console.log("Intensidade: " + intensidade_remate.intensidade)
+                penalty.rodar = true
+            } else if (altura_remate.rodar === true) {
+                altura_remate.rodar = false
+                direcao_remate.rodar = true
+                penalty.altura = altura_remate.altura
+                console.log("Altura: " + altura_remate.altura)
+            } else if (direcao_remate.rodar === true){
+                intensidade_remate.rodar = true
+                direcao_remate.rodar = false
+                penalty.direcao = direcao_remate.direcao
+                console.log("Direcao: " + direcao_remate.direcao)
+            }
         }
     }
 
@@ -37,6 +42,10 @@ GammaGame {
         height: 600
         x:0
         y:0
+        property bool marcandoPenaltis: true
+        property int numeroDeGolosDoJogador: 0
+        property int numeroDeGolosDoComputador: 0
+        state: "MarcacaoDePenaltis"
         // Imagem do relvado
         Image {
             id: relvado
@@ -45,6 +54,12 @@ GammaGame {
             anchors.fill: parent
             source: "imagens/campo.png"
             z:0
+        }
+        // Adicionando a minitela de saida
+        Saida{
+            id: sair
+            anchors.centerIn: campo
+            z:-1
         }
         // Adicionando os placares de jogo
         Placar{ // Placar do Jogador1
@@ -84,14 +99,49 @@ GammaGame {
             x:508
             y:365
         }
-    }
 
-    /*
-    // Adicionando o seletor da altura do remate
-    DirecaoDaDefesa{
-        id: defesa_remate
-        x:410
-        y:500
+        function novoPenalty(){
+            altura_remate.reiniciar()
+            direcao_remate.reiniciar()
+            intensidade_remate.reiniciar()
+            penalty.reiniciar()
+        }
+
+        states: [
+            State {
+                name: "MarcacaoDePenaltis"
+                PropertyChanges {
+                    target:sair
+                    z:-1
+                }
+                PropertyChanges {
+                    target:altura_remate
+                    rodar: true
+                }
+
+            },
+            State {
+                name: "ResultadoFinal"
+                PropertyChanges {
+                    target:sair
+                    z:1
+                }
+                PropertyChanges {
+                    target:altura_remate
+                    rodar: false
+                }
+            }
+        ]
+
+        /*transitions: [
+            Transition {
+                from: "MarcacaoDePenaltis"
+                to: "ResultadoFinal"
+            },
+            Transition {
+                from: "ResultadoFinal"
+                to: "MarcacaoDePenaltis"
+            }
+        ]*/
     }
-    */
 }
