@@ -5,20 +5,23 @@ Item {
     property real direcao: 0
     property real altura: 0
     property real intensidade: 0
+    property real direcaoSalto: 0
+    property real velocidadeSalto: 0
     property bool rodar: false
-    property bool gol: false
+    property real lasty: 0
+    property real lastx: 0
 
     Rectangle{
         id: baliza
-        width: 200
+        width: 250
         height: 100
         z:1
-        x:-90
+        x:-115
         y:-295
         color: "transparent"
         // Imagem de baliza
         Image {
-            width: 200
+            width: 250
             height: 100
             source: "imagens/baliza.png"
         }
@@ -39,7 +42,7 @@ Item {
             source: "imagens/guarda_redes_2.png"
         }
         RotationAnimation on rotation {to: 180; duration: 1}
-        /*NumberAnimation on x {id:ania; to:300; duration: 2000}*/
+        NumberAnimation on x {id:animacao_guardaredes; running:false; to:raiz.direcaoSalto; duration: raiz.velocidadeSalto}
     }
 
     Rectangle {
@@ -47,7 +50,7 @@ Item {
         width: 15
         height: 15
         z:raiz.altura
-        y:0
+        y:45
         x:0
         color: "transparent"
         Image {
@@ -60,24 +63,51 @@ Item {
             running: false
             ParallelAnimation{
                 NumberAnimation { target: bola; property: "x"; to: baliza.x + raiz.direcao; duration: raiz.intensidade }
-                NumberAnimation { target: bola; property: "y"; to: -295; duration: raiz.intensidade }
+                NumberAnimation { target: bola; property: "y"; to: baliza.y; duration: raiz.intensidade }
                 RotationAnimation { target: bola; property: "rotation"; to: 360; duration: raiz.intensidade }
             }
         }
         onXChanged: {
             if(guardaredes.x <= bola.x + bola.width && bola.x <= guardaredes.x + guardaredes.width
-                    && guardaredes.y <= bola.y + bola.height && bola.y <= guardaredes.y + guardaredes.height){
+                    && guardaredes.y <= bola.y + bola.height && bola.y <= guardaredes.y + guardaredes.height
+                    && bola.y !== raiz.lasty && bola.x !== raiz.lastx){
+                raiz.lastx = bola.x
+                raiz.lasty = bola.y
                 animacao_bola.stop()
-                raiz.gol = false;
-            } else if(baliza.x >= bola.x || baliza.x + baliza.width - bola.width <= bola.x || baliza.y >= bola.y){
+                animacao_guardaredes.stop()
+                jogador_placar.atualizacao(false)
+                jogador_placar.incrementaPenaltisMarcados()
+            } else if(baliza.x >= bola.x || baliza.x + baliza.width - bola.width <= bola.x){
                 animacao_bola.stop()
                 if(raiz.altura === 0){
-                    raiz.gol = true
+                    jogador_placar.atualizacao(true)
                 } else {
-
+                    jogador_placar.atualizacao(false)
                 }
+                jogador_placar.incrementaPenaltisMarcados()
             }
         }
+        onYChanged: {
+            if(guardaredes.x <= bola.x + bola.width && bola.x <= guardaredes.x + guardaredes.width
+                    && guardaredes.y <= bola.y + bola.height && bola.y <= guardaredes.y + guardaredes.height
+                    && bola.y !== raiz.lasty && bola.x !== raiz.lastx){
+                raiz.lastx = bola.x
+                raiz.lasty = bola.y
+                jogador_placar.atualizacao(false)
+                jogador_placar.incrementaPenaltisMarcados()
+                animacao_bola.stop()
+                animacao_guardaredes.stop()
+            } else if(baliza.y == bola.y){
+                if(raiz.altura === 0){
+                    jogador_placar.atualizacao(true)
+                } else {
+                    jogador_placar.atualizacao(false)
+                }
+                jogador_placar.incrementaPenaltisMarcados()
+                animacao_bola.stop()
+            }
+        }
+
     }
 
     Rectangle{
@@ -86,7 +116,7 @@ Item {
         height: 30
         z: 0
         x:-9
-        y:90
+        y:150
         color: "transparent"
 
         Image {
@@ -102,9 +132,26 @@ Item {
                     && atacante.y <= bola.y + bola.height && bola.y <= atacante.y + atacante.height){
                 animacao_atacante.stop()
                 animacao_bola.running = true
-                //animacao_guardaredes = true
+                raiz.direcaoSalto = baliza.x + ((Math.random()*baliza.width) + guardaredes.width)
+                raiz.velocidadeSalto = Math.random()*1000
+                animacao_guardaredes.running = true
             }
         }
+    }
+
+    function reiniciar(){
+        raiz.direcao = 0
+        raiz.altura = 0
+        raiz.intensidade = 0
+        raiz.rodar = false
+        bola.x = 0
+        bola.y = 45
+        animacao_bola.running = false
+        atacante.x = -9
+        atacante.y = 150
+        guardaredes.x = -9
+        guardaredes.y = -210
+        animacao_guardaredes.running = false
     }
 
 }

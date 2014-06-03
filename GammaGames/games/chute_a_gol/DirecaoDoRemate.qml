@@ -8,7 +8,7 @@ Item {
     Image {
         id: direcao
         height: 70
-        width: 200
+        width: 270
         source: "imagens/direcao.png"
         z:0
         x:0
@@ -38,12 +38,9 @@ Item {
         }
     }
 
-    //Teste
-    /*MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            animacao.stop()
-            raiz.direcao = seletor.x
-        }
-    }*/
+    function reiniciar(){
+        raiz.direcao = 0
+        raiz.rodar = false
+        seletor.x = (direcao.width - seletor.width)/2
+    }
 }

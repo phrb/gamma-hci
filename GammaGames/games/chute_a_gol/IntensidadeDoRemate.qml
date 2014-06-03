@@ -38,16 +38,11 @@ Item {
         }
     }
 
-    // Teste
-    /*MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            //animacao.paused = !animacao.paused
-            animacao.stop()
-            intensidade.intensidade = (seletor.y*100)/(nivel.height - seletor.height)
-            console.log("Intensidade do remate:" + intensidade.intensidade)
-        }
-    }*/
+    function reiniciar(){
+        raiz.intensidade = 50
+        raiz.rodar = false
+        seletor.y = (intensidade.height - seletor.height)/2
+    }
 }
 
 
