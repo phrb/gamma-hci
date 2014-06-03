@@ -11,9 +11,10 @@ import "../../api"
  */
 GammaGame {
     id: game0
-    timeout_seconds: 2
+    timeout_seconds: 10
     property int direction: 1
-    property int velocity: 10
+    property int velocity: 5
+    property bool waiting: false
 
     Grid{
        anchors.horizontalCenter: parent.horizontalCenter
@@ -116,10 +117,27 @@ GammaGame {
     }
 
     function button1(){
-        shoot.play()
+        if (game0.waiting) {
+            return
+        }
 
-      var newObject = Qt.createComponent("Tiro.qml")
-        newObject.createObject(game0, {"x": ship.x, "y": ship.y});
+        game0.waiting = true;
+
+        shoot.play()
+        var newObject = Qt.createComponent("Tiro.qml")
+        newObject.createObject(game0, {"x": ship.x + ship.width/2, "y": ship.y});
+        waitShotTimer.start()
+    }
+
+    Timer{
+        id: waitShotTimer
+        interval: 700
+        running: false
+        repeat: false
+
+        onTriggered: {
+            game0.waiting  = false;
+        }
     }
 
     ParticleSystem {
