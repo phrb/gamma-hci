@@ -39,7 +39,7 @@ Rectangle {
         source: "menu.wav"
     }
 
-    Image {
+    AnimatedImage {
 
         id: preview
         z: 1000
