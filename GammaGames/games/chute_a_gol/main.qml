@@ -38,10 +38,9 @@ GammaGame {
     // Criando o campo
     Item{
         id: campo
+        anchors.fill: parent
         width: 1000
         height: 600
-        x:0
-        y:0
         property bool marcandoPenaltis: true
         property int numeroDeGolosDoJogador: 0
         property int numeroDeGolosDoComputador: 0
@@ -64,40 +63,40 @@ GammaGame {
         // Adicionando os placares de jogo
         Placar{ // Placar do Jogador1
             id: jogador_placar
-            x:13
+            x:40
             y:7
             texto: "Jogador"
         }
         Placar{ // Placar do Jogador2
             id: computador_placar
-            x:687
+            x:950
             y:7
             texto: "Computador"
         }
         // Adicionando o seletor da altura do remate
         AlturaDoRemate{
             id: altura_remate
-            x:100
-            y:490
+            x:200
+            y:600
             rodar: true
         }
         // Adicionando o seletor da direcao do remate
         DirecaoDoRemate{
             id: direcao_remate
-            x:420
-            y:500
+            x:520
+            y:605
         }
         // Adicionando o seletor da intensidade do remate
         IntensidadeDoRemate{
             id: intensidade_remate
-            x:800
-            y:470
+            x:950
+            y:575
         }
         // Adicionando o jogador que vai marcar o penalty
         AtacanteVsGuardaRedes{
             id: penalty
-            x:508
-            y:365
+            x:650
+            y:398
         }
 
         function novoPenalty(){

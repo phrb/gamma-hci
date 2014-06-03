@@ -8,7 +8,7 @@ Item {
     Image {
         id: direcao
         height: 70
-        width: 200
+        width: 270
         source: "imagens/direcao.png"
         z:0
         x:0

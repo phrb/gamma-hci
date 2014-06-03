@@ -11,15 +11,15 @@ Item {
 
     Rectangle{
         id: baliza
-        width: 200
+        width: 250
         height: 100
         z:1
-        x:-90
+        x:-115
         y:-295
         color: "transparent"
         // Imagem de baliza
         Image {
-            width: 200
+            width: 250
             height: 100
             source: "imagens/baliza.png"
         }
@@ -48,7 +48,7 @@ Item {
         width: 15
         height: 15
         z:raiz.altura
-        y:0
+        y:45
         x:0
         color: "transparent"
         Image {
@@ -118,7 +118,7 @@ Item {
         height: 30
         z: 0
         x:-9
-        y:90
+        y:150
         color: "transparent"
 
         Image {
@@ -133,7 +133,6 @@ Item {
             if(atacante.x <= bola.x + bola.width && bola.x <= atacante.x + atacante.width
                     && atacante.y <= bola.y + bola.height && bola.y <= atacante.y + atacante.height){
                 animacao_atacante.stop()
-                console.log(":}")
                 animacao_bola.running = true
                 //animacao_guardaredes = true
             }
