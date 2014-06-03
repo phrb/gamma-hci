@@ -19,10 +19,10 @@ Rectangle {
             view.decrementCurrentIndex()
         }
     }
-<<<<<<< HEAD
-    AnimatedImage {
-=======
 
+    AnimatedImage {
+
+}
     Timer{
         id: chooseTimer
         interval: 1500
@@ -40,7 +40,7 @@ Rectangle {
     }
 
     Image {
->>>>>>> fce7ce9d2600041d365e8217c208cc9f5f5c3261
+
         id: preview
         z: 1000
         signal changeGame(string previewSource)
@@ -136,5 +136,8 @@ Rectangle {
             onStateChanged: if (state === "SELECTED") preview.changeGame(game.previewSource)
         }
 
+
     }
+
 }
+
