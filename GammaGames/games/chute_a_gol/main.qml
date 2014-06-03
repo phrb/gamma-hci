@@ -57,7 +57,7 @@ GammaGame {
         // Adicionando a minitela de saida
         Saida{
             id: sair
-            anchors.centerIn: campo
+            anchors.centerIn: parent
             z:-1
         }
         // Adicionando os placares de jogo
