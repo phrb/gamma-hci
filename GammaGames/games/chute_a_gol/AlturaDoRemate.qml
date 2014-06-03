@@ -33,7 +33,6 @@ Item {
     onRodarChanged: {
         var aux = ((altura.height - seletor.height - seletor.y)*100)/(altura.height - seletor.height)
         if (raiz.rodar === false) {
-            console.log("AlturaDoRemate: " + aux)
             raiz.altura = (aux >= 90 ? 1 : 0)
         }
     }

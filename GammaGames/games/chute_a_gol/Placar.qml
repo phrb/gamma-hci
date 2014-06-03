@@ -207,13 +207,10 @@ Rectangle {
     ]
 
     function atualizacao(gol) {
-        console.log("gol: " + gol)
         if(gol){
             placar.golos_marcados++
-            console.log("golos_marcados: " + placar.golos_marcados)
         }else{
             placar.golos_falhados++
-            console.log("golos_falhados: " + placar.golos_falhados)
         }
         if (placar.state == "placar0") {
             placar.state = "placar1"

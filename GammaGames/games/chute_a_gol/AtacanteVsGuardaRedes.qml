@@ -5,6 +5,8 @@ Item {
     property real direcao: 0
     property real altura: 0
     property real intensidade: 0
+    property real direcaoSalto: 0
+    property real velocidadeSalto: 0
     property bool rodar: false
     property real lasty: 0
     property real lastx: 0
@@ -40,7 +42,7 @@ Item {
             source: "imagens/guarda_redes_2.png"
         }
         RotationAnimation on rotation {to: 180; duration: 1}
-        //NumberAnimation on x {id:ania; to:300; duration: 2000}
+        NumberAnimation on x {id:animacao_guardaredes; running:false; to:raiz.direcaoSalto; duration: raiz.velocidadeSalto}
     }
 
     Rectangle {
@@ -66,15 +68,13 @@ Item {
             }
         }
         onXChanged: {
-            console.log("baliza.y:" + baliza.y)
-            console.log("bola.y:" + bola.y)
-            console.log("altura:" + raiz.altura)
             if(guardaredes.x <= bola.x + bola.width && bola.x <= guardaredes.x + guardaredes.width
                     && guardaredes.y <= bola.y + bola.height && bola.y <= guardaredes.y + guardaredes.height
                     && bola.y !== raiz.lasty && bola.x !== raiz.lastx){
                 raiz.lastx = bola.x
                 raiz.lasty = bola.y
                 animacao_bola.stop()
+                animacao_guardaredes.stop()
                 jogador_placar.atualizacao(false)
                 jogador_placar.incrementaPenaltisMarcados()
             } else if(baliza.x >= bola.x || baliza.x + baliza.width - bola.width <= bola.x){
@@ -88,9 +88,6 @@ Item {
             }
         }
         onYChanged: {
-            console.log("baliza.y:" + baliza.y)
-            console.log("bola.y:" + bola.y)
-            console.log("altura:" + raiz.altura)
             if(guardaredes.x <= bola.x + bola.width && bola.x <= guardaredes.x + guardaredes.width
                     && guardaredes.y <= bola.y + bola.height && bola.y <= guardaredes.y + guardaredes.height
                     && bola.y !== raiz.lasty && bola.x !== raiz.lastx){
@@ -99,6 +96,7 @@ Item {
                 jogador_placar.atualizacao(false)
                 jogador_placar.incrementaPenaltisMarcados()
                 animacao_bola.stop()
+                animacao_guardaredes.stop()
             } else if(baliza.y == bola.y){
                 if(raiz.altura === 0){
                     jogador_placar.atualizacao(true)
@@ -134,7 +132,9 @@ Item {
                     && atacante.y <= bola.y + bola.height && bola.y <= atacante.y + atacante.height){
                 animacao_atacante.stop()
                 animacao_bola.running = true
-                //animacao_guardaredes = true
+                raiz.direcaoSalto = baliza.x + ((Math.random()*baliza.width) + guardaredes.width)
+                raiz.velocidadeSalto = Math.random()*1000
+                animacao_guardaredes.running = true
             }
         }
     }
@@ -145,10 +145,13 @@ Item {
         raiz.intensidade = 0
         raiz.rodar = false
         bola.x = 0
-        bola.y = 0
+        bola.y = 45
         animacao_bola.running = false
         atacante.x = -9
-        atacante.y = 90
+        atacante.y = 150
+        guardaredes.x = -9
+        guardaredes.y = -210
+        animacao_guardaredes.running = false
     }
 
 }
