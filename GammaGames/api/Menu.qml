@@ -6,7 +6,15 @@ Rectangle {
     width: sceneLoader.width
     height: sceneLoader.height
     color: "black"
+    property int rotate_time: 3
+    Timer{
+        interval: rotate_time * 1000; running: true;
+        repeat: true;
 
+        onTriggered: {
+            view.decrementCurrentIndex()
+        }
+    }
     Image {
         id: preview
 
@@ -22,6 +30,7 @@ Rectangle {
         id: view
 
         focus: true
+
         Keys.onLeftPressed: decrementCurrentIndex()
         Keys.onRightPressed: incrementCurrentIndex()
         Keys.onEscapePressed: Qt.quit()
