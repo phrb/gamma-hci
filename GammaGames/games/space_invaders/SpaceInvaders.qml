@@ -154,12 +154,7 @@ GammaGame {
             size: 20
         }
     }
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            sceneLoader.source = sceneLoader.menuSource
-        }
-    }
+
     Image {
         id: ship
         width: parent.width * 0.05
