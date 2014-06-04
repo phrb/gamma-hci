@@ -72,7 +72,7 @@ GammaGame {
 
     Timer{
         id: waitShotTimer
-        interval: 700
+        interval: 350
         running: false
         repeat: false
 
@@ -93,12 +93,6 @@ GammaGame {
         Emitter {
             anchors.fill: parent
             size: 20
-        }
-    }
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            sceneLoader.source = sceneLoader.menuSource
         }
     }
     Image {
