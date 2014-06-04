@@ -15,100 +15,41 @@ GammaGame {
     property int direction: 1
     property int velocity: 5
     property bool waiting: false
+    property variant aliens: [alien1,alien2,alien3,alien4,alien5]
 
-    Grid{
-       anchors.horizontalCenter: parent.horizontalCenter
-        columns: 10
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
-            AnimatedImage {
-                source: "imagens/enemy.gif"
-            }
+    Alien{
+        id: alien1
+        x:0
+        y:300
+        z:0
+    }
+
+    Alien{
+        id: alien2
+        x:100
+        y:200
+        z:0
+    }
+
+    Alien{
+        id: alien3
+        x:900
+        y: 100
+        z:0
+    }
+
+    Alien{
+        id: alien4
+        x:600
+        y:200
+        z:0
+    }
+
+    Alien{
+        id: alien5
+        x:400
+        y:200
+        z:0
     }
 
     SoundEffect{
@@ -125,7 +66,7 @@ GammaGame {
 
         shoot.play()
         var newObject = Qt.createComponent("Tiro.qml")
-        newObject.createObject(game0, {"x": ship.x + ship.width/2, "y": ship.y});
+        newObject.createObject(game0, {"x": ship.x + ship.width/2, "y": ship.y, "aliens":game0.aliens});
         waitShotTimer.start()
     }
 
@@ -154,7 +95,12 @@ GammaGame {
             size: 20
         }
     }
-
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            sceneLoader.source = sceneLoader.menuSource
+        }
+    }
     Image {
         id: ship
         width: parent.width * 0.05
