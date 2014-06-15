@@ -7,10 +7,14 @@ Rectangle {
     width: sceneLoader.width
     height: sceneLoader.height
     color: "black"
-    state: "tag"
+    state: sceneLoader.lastChosenGameIndex === -1 ? "tag" : "game";
 
     property int rotate_time: 2000
     property string selectSound: "menu.wav"
+
+    GameList {
+        id: gammaGameList
+    }
 
     states: [
         State {
@@ -27,6 +31,7 @@ Rectangle {
             PropertyChanges { target: carousel_tag; opacity: 1; z: 10; scale: 1.0 }
             PropertyChanges { target: carousel_game; opacity: 0; z: 0; scale: 0.01 }
             onCompleted: {
+                sceneLoader.lastChosenGameIndex = -1;
                 carousel_tag.focus = true;
                 rotateTimerTag.start();
             }
@@ -71,7 +76,7 @@ Rectangle {
     Timer {
         id: rotateTimerTag
         interval: rotate_time
-        running: true
+        running: screen.state === "tag"
         repeat: true
 
         onTriggered: {
@@ -82,7 +87,7 @@ Rectangle {
     Timer {
         id: rotateTimerGame
         interval: rotate_time
-        running: false
+        running: screen.state === "game"
         repeat: true
 
         onTriggered: {
@@ -99,12 +104,14 @@ Rectangle {
     AnimatedImage {
         id: preview
         opacity: 0
+        z: 0
 
         states: [
             State {
                 name: "expanded"
                 PropertyChanges { target: preview; opacity: 1; x: (width*scale-width)/2.0; y: (height*scale-height)/2.0; z: 100; width: screen.width/scale; height: screen.height/scale }
                 onCompleted: {
+                    sceneLoader.lastChosenGameIndex = carousel_game.currentIndex;
                     sceneLoader.source = carousel_game.currentItem.gameFile
                 }
             }
@@ -124,15 +131,18 @@ Rectangle {
         id: carousel_tag
         width: screen.width * 0.8
         height: screen.height * 0.4
+        scale: screen.state === "tag" ? 1.0 : 0.01
+        opacity: screen.state === "tag" ? 1 : 0
+        z: screen.state === "tag" ? 10 : 0
         anchors.centerIn: screen
-        focus: true
+        focus: screen.state === "tag"
 
         Keys.onEscapePressed: Qt.quit()
         Keys.onSpacePressed: {
             playSound.play();
             focus = false;
             rotateTimerTag.stop();
-            sceneLoader.lastChosenIndex = currentIndex;
+            sceneLoader.lastChosenTagIndex = currentIndex;
             screen.state = "game";
             carousel_game.currentIndex = 0;
             carousel_game.model = currentItem.games;
@@ -146,9 +156,9 @@ Rectangle {
         preferredHighlightBegin: 0
         preferredHighlightEnd: 0
         highlightRangeMode: PathView.StrictlyEnforceRange
-        currentIndex: sceneLoader.lastChosenIndex
+        currentIndex: sceneLoader.lastChosenTagIndex
 
-        model: GameList {}
+        model: gammaGameList
         delegate: tagDelegate
     }
 
@@ -156,9 +166,11 @@ Rectangle {
         id: carousel_game
         width: screen.width * 0.8
         height: screen.height * 0.4
-        scale: 0.01
+        scale: screen.state === "game" ? 1.0 : 0.01
+        opacity: screen.state === "game" ? 1 : 0
+        z: screen.state === "game" ? 10 : 0
         anchors.centerIn: screen
-        focus: false
+        focus: screen.state === "game"
 
         Keys.onEscapePressed: Qt.quit()
         Keys.onSpacePressed: {
@@ -188,8 +200,9 @@ Rectangle {
         preferredHighlightBegin: 0
         preferredHighlightEnd: 0
         highlightRangeMode: PathView.StrictlyEnforceRange
-        currentIndex: 0
+        currentIndex: sceneLoader.lastChosenGameIndex === -1 ? 0 : sceneLoader.lastChosenGameIndex
 
+        model: sceneLoader.lastChosenGameIndex === -1 ? [] : gammaGameList.get(sceneLoader.lastChosenTagIndex).gameList
         delegate: gameDelegate
     }
 
