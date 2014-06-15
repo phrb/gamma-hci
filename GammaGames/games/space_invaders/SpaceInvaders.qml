@@ -86,7 +86,7 @@ GammaGame {
 
         // renders a tiny image
         ImageParticle {
-            source: "../../api/imgs/particle.png"
+            source: "imagens/particle.png"
         }
 
         // emit particle object with a size of 20 pixels
