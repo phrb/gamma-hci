@@ -7,6 +7,7 @@ Rectangle {
     width: sceneLoader.width
     height: sceneLoader.height
     color: "black"
+    state: "tag"
 
     property int rotate_time: 2000
     property string selectSound: "menu.wav"
@@ -34,9 +35,35 @@ Rectangle {
 
     transitions: [
         Transition {
-            NumberAnimation {
-                duration: 1000;
-                properties: "scale,opacity"
+            from: "tag"
+            to: "game"
+            SequentialAnimation {
+                NumberAnimation {
+                    target: carousel_tag
+                    duration: 1000
+                    properties: "scale,opacity"
+                }
+                NumberAnimation {
+                    target: carousel_game
+                    duration: 1000
+                    properties: "scale,opacity"
+                }
+            }
+        },
+        Transition {
+            from: "game"
+            to: "tag"
+            SequentialAnimation {
+                NumberAnimation {
+                    target: carousel_game
+                    duration: 1000
+                    properties: "scale,opacity"
+                }
+                NumberAnimation {
+                    target: carousel_tag
+                    duration: 1000
+                    properties: "scale,opacity"
+                }
             }
         }
     ]
@@ -138,7 +165,7 @@ Rectangle {
             focus = false;
             rotateTimerGame.stop();
 
-            if (currentItem.objectName === "Voltar" && currentItem.file === "") {
+            if (currentItem.objectName === "Voltar" && currentItem.file === undefined) {
                 screen.state = "tag";
             }
             else {
