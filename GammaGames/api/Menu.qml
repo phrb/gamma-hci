@@ -40,12 +40,12 @@ Rectangle {
             SequentialAnimation {
                 NumberAnimation {
                     target: carousel_tag
-                    duration: 1000
+                    duration: 750
                     properties: "scale,opacity"
                 }
                 NumberAnimation {
                     target: carousel_game
-                    duration: 1000
+                    duration: 750
                     properties: "scale,opacity"
                 }
             }
@@ -56,12 +56,12 @@ Rectangle {
             SequentialAnimation {
                 NumberAnimation {
                     target: carousel_game
-                    duration: 1000
+                    duration: 750
                     properties: "scale,opacity"
                 }
                 NumberAnimation {
                     target: carousel_tag
-                    duration: 1000
+                    duration: 750
                     properties: "scale,opacity"
                 }
             }
@@ -113,7 +113,7 @@ Rectangle {
         transitions: [
             Transition {
                 NumberAnimation {
-                    duration: 1250;
+                    duration: 1000;
                     properties: "x,y,height,width"
                 }
             }
@@ -134,6 +134,7 @@ Rectangle {
             rotateTimerTag.stop();
             sceneLoader.lastChosenIndex = currentIndex;
             screen.state = "game";
+            carousel_game.currentIndex = 0;
             carousel_game.model = currentItem.games;
         }
 
@@ -187,6 +188,7 @@ Rectangle {
         preferredHighlightBegin: 0
         preferredHighlightEnd: 0
         highlightRangeMode: PathView.StrictlyEnforceRange
+        currentIndex: 0
 
         delegate: gameDelegate
     }
