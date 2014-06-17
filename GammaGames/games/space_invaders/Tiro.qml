@@ -1,43 +1,37 @@
 import QtQuick 2.0
+import QtMultimedia 5.0
 
-Rectangle{
+Rectangle {
     id: tiro
-    z: 0
-    width: 10
-    height: 10
     color: "transparent"
-    property variant aliens:  null
-    Image{
-        height: 10
-        width: 10
-        source: "imagens/shot.png"
+
+    AnimatedImage{
+        anchors.fill: parent
+        source: "imagens/shot.gif"
     }
     SequentialAnimation on y {
         id: yAnim
         running: true
-        NumberAnimation { from: ship.y; to: -50; duration: 500; /*easing.type: Easing.InOutQuad*/ }
+        NumberAnimation { to: 0; duration: 1600000/spaceInvaders.height }
     }
 
-    onXChanged: {
-        for(var i = 0; i < tiro.aliens.length; i++){
-            if (!tiro.aliens[i].dead){
-                if(tiro.x <= tiro.aliens[i].x + tiro.aliens[i].width && tiro.aliens[i].x <= tiro.x + tiro.width
-                        && tiro.y <= tiro.aliens[i].y + tiro.aliens[i].height && tiro.aliens[i].y <= tiro.y + tiro.height){
-                    tiro.destroy()
-                    tiro.aliens[i].death()
-                }
-            }
+    SoundEffect {
+        id: shoot
+        source: "efeitos_sonoros/shoot.wav"
+    }
+
+    onYChanged: {
+        var enemy = alienArea.childAt(x+width/2.0,y);
+        if (enemy !== null && enemy.objectName === "alien") {
+            enemy.state = "dead";
+            tiro.destroy();
+        }
+        else if (tiro.y === 0) {
+            tiro.destroy();
         }
     }
-    onYChanged: {
-        for(var i = 0; i < tiro.aliens.length; i++){
-            if (!tiro.aliens[i].dead){
-                if(tiro.x <= tiro.aliens[i].x + tiro.aliens[i].width && tiro.aliens[i].x <= tiro.x + tiro.width
-                        && tiro.y <= tiro.aliens[i].y + tiro.aliens[i].height && tiro.aliens[i].y <= tiro.y + tiro.height){
-                    tiro.destroy()
-                    tiro.aliens[i].death()
-                }
-            }
-        }
+
+    Component.onCompleted: {
+        shoot.play();
     }
 }
