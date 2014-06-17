@@ -16,10 +16,6 @@ Rectangle {
         id: gammaGameList
     }
 
-    SoundEffect {
-        id: playSound
-        source: "menu.wav"
-        volume: 0.3
     states: [
         State {
             name: "game"
@@ -79,7 +75,6 @@ Rectangle {
     SoundEffect {
         id: playSound
         source: selectSound
-        volume: 0.3
     }
 
     AnimatedImage {
@@ -168,20 +163,6 @@ Rectangle {
             focus = false;
             rotateTimer.stop();
 
-        SequentialAnimation {
-            id: anim
-            running: false
-
-            PropertyAnimation {
-                target: view.currentItem
-                properties: "scale"
-                to: 15.0
-                duration: 500
-            }
-
-            onStopped: {
-                sceneLoader.lastChosenIndex = view.currentIndex
-                sceneLoader.source = view.currentItem.gameFile
             if (currentItem.objectName === "Voltar" && currentItem.file === undefined) {
                 screen.state = "tag";
             }
@@ -209,11 +190,6 @@ Rectangle {
         model: sceneLoader.lastChosenGameIndex === -1 ? [] : gammaGameList.get(sceneLoader.lastChosenTagIndex).gameList
         delegate: gameDelegate
 
-        width: parent.width * 0.8
-        height: parent.height * 0.3
-        y: parent.height * 0.3
-        anchors.horizontalCenter: parent.horizontalCenter
-        currentIndex: sceneLoader.lastChosenIndex
         Component.onCompleted: {
             if (screen.state === "game") {
                 scale =  1
@@ -230,13 +206,6 @@ Rectangle {
         Item {
             id: wrapperTag
             objectName: name
-            width: screen.width/5.0 + selectionBorder
-            height: screen.height/5.0 + selectionBorder
-            scale: 4*y/view.y < 0.75 ? 0.75 : 4*y/view.y
-            color: "transparent"
-            z: y/screen.height
-            smooth: true
-            opacity: scale / 2.0 < 0.2 ? 0.2 : scale / 2.0
             width: screen.width/10.0 + selectionBorder
             height: screen.height/10.0 + selectionBorder
             visible: PathView.onPath
@@ -268,20 +237,6 @@ Rectangle {
         }
     }
 
-            states: [
-                State {
-                    name: "SELECTED"
-                    PropertyChanges { target: game; border.color: "red"; border.width : selectionBorder }
-                },
-                State {
-                    name: "UNSELECTED"
-                    PropertyChanges { target: game; border.color: "black"; border.width : selectionBorder }
-                }
-            ]
-
-            state: PathView.isCurrentItem ? "SELECTED" : "UNSELECTED"
-            Component.onCompleted: {
-                view.decrementCurrentIndex()
     Component {
         id: gameDelegate
 

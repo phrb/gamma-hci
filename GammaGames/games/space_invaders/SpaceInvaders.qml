@@ -58,10 +58,6 @@ GammaGame {
         running: false
         repeat: false
 
-    SoundEffect{
-        id: shoot
-        source: "efeitos_sonoros/shoot.wav"
-        volume: 0.3
         onTriggered: {
             spaceInvaders.waiting  = false;
         }
