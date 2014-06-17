@@ -54,7 +54,7 @@ GammaGame {
 
     Timer {
         id: waitShotTimer
-        interval: 350
+        interval: 100
         running: false
         repeat: false
 

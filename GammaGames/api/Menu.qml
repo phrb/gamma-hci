@@ -9,7 +9,7 @@ Rectangle {
     color: "black"
     state: sceneLoader.lastChosenGameIndex === -1 ? "tag" : "game";
 
-    property int rotate_time: 2000
+    property int rotate_time: 1300
     property string selectSound: "menu.wav"
 
     GameList {
