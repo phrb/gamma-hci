@@ -20,6 +20,17 @@ Rectangle {
     property bool key_pressed: false
     property int timeout_seconds: 10
 
+    Rectangle {
+        id: timeout_bar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: parent.width
+        height: 20
+        opacity: 0
+        z: 2
+        color: "red"
+    }
+
     function escape_key (){
         sceneLoader.source = "../" + sceneLoader.menuSource;
     }
@@ -31,23 +42,32 @@ Rectangle {
     color: "black"
     anchors.fill: parent
     focus: true
-    Timer{
-        interval: timeout_seconds * 1000; running: true;
+    Timer {
+        id: timeout_timer
+        interval: timeout_seconds * 1000 / 100; running: true;
         repeat: true;
+        property int ticks: 0
 
         onTriggered: {
-            if ( !key_pressed ){
-                sceneLoader.source = "../" + sceneLoader.menuSource
+            ticks += 1;
+            timeout_bar.width = timeout_bar.width - (parent.width/100);
+            timeout_bar.opacity = timeout_bar.opacity + 0.01;
+            if (timeout_bar.opacity > 1){
+                timeout_bar.opacity = 1;
             }
-            else{
-                key_pressed = false;
+            if (timeout_bar.width < 0){
+                timeout_bar.width = 0;
+            }
+            if ( ticks > 100 ){
+                sceneLoader.source = "../" + sceneLoader.menuSource
             }
         }
     }
+
     Keys.onReleased: {
-        if ( !key_pressed ){
-            key_pressed = true;
-        }
+        timeout_timer.ticks = 0;
+        timeout_bar.opacity = 0;
+        timeout_bar.width = parent.width
     }
     Keys.onEscapePressed: escape_key()
     Keys.onSpacePressed: button1() // Digit0: Provisory bindings for Button1.

@@ -20,23 +20,10 @@ Rectangle {
         }
     }
 
-    AnimatedImage {
-
-}
-    Timer{
-        id: chooseTimer
-        interval: 1500
-        running: false
-        repeat: false
-
-        onTriggered: {
-            sceneLoader.source = view.currentItem.gameFile
-        }
-    }
-
     SoundEffect {
         id: playSound
         source: "menu.wav"
+        volume: 0.3
     }
 
     AnimatedImage {
@@ -69,13 +56,16 @@ Rectangle {
             anim.start()
         }
 
-        ParallelAnimation {
+        SequentialAnimation {
             id: anim
             running: false
-            NumberAnimation { target: preview; property: "width"; to: screen.width; duration: 1000 }
-            NumberAnimation { target: preview; property: "height"; to: screen.height; duration: 1000 }
-            AnchorAnimation { duration: 1000 }
-            NumberAnimation { target: preview; property: "y"; to: 0; duration: 1000 }
+
+            PropertyAnimation {
+                target: view.currentItem
+                properties: "scale"
+                to: 15.0
+                duration: 500
+            }
 
             onStopped: {
                 sceneLoader.lastChosenIndex = view.currentIndex
@@ -92,9 +82,9 @@ Rectangle {
         preferredHighlightEnd: 0
         highlightRangeMode: PathView.StrictlyEnforceRange
 
-        width: parent.width * 0.9
-        height: parent.height * 0.4
-        y: parent.height * 0.5
+        width: parent.width * 0.8
+        height: parent.height * 0.3
+        y: parent.height * 0.3
         anchors.horizontalCenter: parent.horizontalCenter
         currentIndex: sceneLoader.lastChosenIndex
 
@@ -102,8 +92,8 @@ Rectangle {
         delegate: Rectangle {
             id: game
             objectName: name
-            width: screen.width/10.0 + selectionBorder
-            height: screen.height/10.0 + selectionBorder
+            width: screen.width/5.0 + selectionBorder
+            height: screen.height/5.0 + selectionBorder
             scale: 4*y/view.y < 0.75 ? 0.75 : 4*y/view.y
             color: "transparent"
             z: y/screen.height
@@ -124,20 +114,19 @@ Rectangle {
             states: [
                 State {
                     name: "SELECTED"
-                    PropertyChanges { target: game; border.color: "red"; border.width : selectionBorder}
+                    PropertyChanges { target: game; border.color: "red"; border.width : selectionBorder }
                 },
                 State {
                     name: "UNSELECTED"
-                    PropertyChanges { target: game; border.color: "black"; border.width : selectionBorder}
+                    PropertyChanges { target: game; border.color: "black"; border.width : selectionBorder }
                 }
             ]
 
             state: PathView.isCurrentItem ? "SELECTED" : "UNSELECTED"
-            onStateChanged: if (state === "SELECTED") preview.changeGame(game.previewSource)
+            Component.onCompleted: {
+                view.decrementCurrentIndex()
+            }
         }
-
-
     }
-
 }
 

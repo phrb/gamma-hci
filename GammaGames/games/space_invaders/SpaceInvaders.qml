@@ -55,6 +55,7 @@ GammaGame {
     SoundEffect{
         id: shoot
         source: "efeitos_sonoros/shoot.wav"
+        volume: 0.3
     }
 
     function button1(){
