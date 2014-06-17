@@ -19,21 +19,23 @@ Rectangle {
     states: [
         State {
             name: "game"
-            PropertyChanges { target: carousel_tag; opacity: 0; z: 0; scale: 0.01 }
-            PropertyChanges { target: carousel_game; opacity: 1; z: 10; scale: 1.0 }
+            PropertyChanges { target: carousel_tag; opacity: 0; z: 0; scale: 0 }
+            PropertyChanges { target: carousel_game; opacity: 1; z: 10; scale: 1 }
             onCompleted: {
                 carousel_game.focus = true;
-                rotateTimerGame.start();
+                rotateTimer.carousel = carousel_game;
+                rotateTimer.start();
             }
         },
         State {
             name: "tag"
-            PropertyChanges { target: carousel_tag; opacity: 1; z: 10; scale: 1.0 }
-            PropertyChanges { target: carousel_game; opacity: 0; z: 0; scale: 0.01 }
+            PropertyChanges { target: carousel_tag; opacity: 1; z: 10; scale: 1 }
+            PropertyChanges { target: carousel_game; opacity: 0; z: 0; scale: 0 }
             onCompleted: {
                 sceneLoader.lastChosenGameIndex = -1;
                 carousel_tag.focus = true;
-                rotateTimerTag.start();
+                rotateTimer.carousel = carousel_tag;
+                rotateTimer.start();
             }
         }
     ]
@@ -42,6 +44,7 @@ Rectangle {
         Transition {
             from: "tag"
             to: "game"
+            reversible: true
             SequentialAnimation {
                 NumberAnimation {
                     target: carousel_tag
@@ -50,22 +53,6 @@ Rectangle {
                 }
                 NumberAnimation {
                     target: carousel_game
-                    duration: 750
-                    properties: "scale,opacity"
-                }
-            }
-        },
-        Transition {
-            from: "game"
-            to: "tag"
-            SequentialAnimation {
-                NumberAnimation {
-                    target: carousel_game
-                    duration: 750
-                    properties: "scale,opacity"
-                }
-                NumberAnimation {
-                    target: carousel_tag
                     duration: 750
                     properties: "scale,opacity"
                 }
@@ -74,27 +61,16 @@ Rectangle {
     ]
 
     Timer {
-        id: rotateTimerTag
+        id: rotateTimer
         interval: rotate_time
-        running: screen.state === "tag"
+        running: false
         repeat: true
+        property PathView carousel
 
         onTriggered: {
-            carousel_tag.decrementCurrentIndex()
+            carousel.decrementCurrentIndex()
         }
     }
-
-    Timer {
-        id: rotateTimerGame
-        interval: rotate_time
-        running: screen.state === "game"
-        repeat: true
-
-        onTriggered: {
-            carousel_game.decrementCurrentIndex()
-        }
-    }
-
 
     SoundEffect {
         id: playSound
@@ -131,17 +107,17 @@ Rectangle {
         id: carousel_tag
         width: screen.width * 0.8
         height: screen.height * 0.4
-        scale: screen.state === "tag" ? 1.0 : 0.01
-        opacity: screen.state === "tag" ? 1 : 0
-        z: screen.state === "tag" ? 10 : 0
+        scale: 0
+        opacity: 0
+        z: 0
+        focus: false
         anchors.centerIn: screen
-        focus: screen.state === "tag"
 
         Keys.onEscapePressed: Qt.quit()
         Keys.onSpacePressed: {
             playSound.play();
             focus = false;
-            rotateTimerTag.stop();
+            rotateTimer.stop();
             sceneLoader.lastChosenTagIndex = currentIndex;
             screen.state = "game";
             carousel_game.currentIndex = 0;
@@ -160,23 +136,32 @@ Rectangle {
 
         model: gammaGameList
         delegate: tagDelegate
+
+        Component.onCompleted: {
+            if (screen.state === "tag") {
+                scale =  1
+                opacity = 1
+                z: 10
+                focus: true
+            }
+        }
     }
 
     PathView {
         id: carousel_game
         width: screen.width * 0.8
         height: screen.height * 0.4
-        scale: screen.state === "game" ? 1.0 : 0.01
-        opacity: screen.state === "game" ? 1 : 0
-        z: screen.state === "game" ? 10 : 0
+        scale: 0
+        opacity: 0
+        z: 0
+        focus: false
         anchors.centerIn: screen
-        focus: screen.state === "game"
 
         Keys.onEscapePressed: Qt.quit()
         Keys.onSpacePressed: {
             playSound.play();
             focus = false;
-            rotateTimerGame.stop();
+            rotateTimer.stop();
 
             if (currentItem.objectName === "Voltar" && currentItem.file === undefined) {
                 screen.state = "tag";
@@ -204,6 +189,15 @@ Rectangle {
 
         model: sceneLoader.lastChosenGameIndex === -1 ? [] : gammaGameList.get(sceneLoader.lastChosenTagIndex).gameList
         delegate: gameDelegate
+
+        Component.onCompleted: {
+            if (screen.state === "game") {
+                scale =  1
+                opacity = 1
+                z: 10
+                focus: true
+            }
+        }
     }
 
     Component {
@@ -229,6 +223,7 @@ Rectangle {
                 color: "transparent"
                 border.width: parent.selectionBorder
                 border.color: parent.currentItem ? "red" : "black"
+                radius: 1
             }
 
             AnimatedImage {
@@ -266,6 +261,7 @@ Rectangle {
                 color: "transparent"
                 border.width: parent.selectionBorder
                 border.color: parent.currentItem ? "red" : "black"
+                radius: 1
             }
 
             AnimatedImage {

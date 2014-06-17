@@ -81,14 +81,14 @@ ListModel {
                 file: "../games/chute_a_gol/main.qml"
             },
             ListElement {
-                name: "Space Invaders";
-                menuImage: "../games/space_invaders/imagens/CoolSI.gif";
-                file: "../games/space_invaders/SpaceInvaders.qml"
-            },
-            ListElement {
                 name: "Voltar";
                 menuImage: "imgs/back.png";
                 file: "";
+            },
+            ListElement {
+                name: "Space Invaders";
+                menuImage: "../games/space_invaders/imagens/CoolSI.gif";
+                file: "../games/space_invaders/SpaceInvaders.qml"
             }
         ]
     }
@@ -102,14 +102,14 @@ ListModel {
                 file: "../games/chute_a_gol/main.qml"
             },
             ListElement {
-                name: "Space Invaders";
-                menuImage: "../games/space_invaders/imagens/CoolSI.gif";
-                file: "../games/space_invaders/SpaceInvaders.qml"
-            },
-            ListElement {
                 name: "Voltar";
                 menuImage: "imgs/back.png";
                 file: "";
+            },
+            ListElement {
+                name: "Space Invaders";
+                menuImage: "../games/space_invaders/imagens/CoolSI.gif";
+                file: "../games/space_invaders/SpaceInvaders.qml"
             }
         ]
     }
