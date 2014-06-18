@@ -9,7 +9,7 @@ Rectangle {
     color: "black"
     state: sceneLoader.lastChosenGameIndex === -1 ? "tag" : "game";
 
-    property int rotate_time: 1300
+    property int rotate_time: 1500
     property string selectSound: "menu.wav"
 
     GameList {
@@ -212,7 +212,7 @@ Rectangle {
             scale: PathView.itemScale
             z: PathView.itemZ
 
-            property int selectionBorder: 4
+            property int selectionBorder: 2
             property var games: gameList
             property bool currentItem: PathView.isCurrentItem
             property bool moving: PathView.view.moving
@@ -224,15 +224,24 @@ Rectangle {
                 border.width: parent.selectionBorder
                 border.color: parent.currentItem ? "red" : "black"
                 radius: 1
-            }
 
-            AnimatedImage {
-                width: parent.width - parent.selectionBorder
-                height: parent.height - parent.selectionBorder
-                source: menuImage
-                anchors.centerIn: parent
-                smooth: moving
-                opacity: opacityValue
+                AnimatedImage {
+                    width: parent.width - parent.border.width
+                    height: parent.height - parent.border.width
+                    anchors.centerIn: parent
+                    source: menuImage
+                    smooth: moving
+                    opacity: opacityValue
+                    z: parent.z - 1
+                }
+
+                Text {
+                    text: name
+                    color: "white"
+                    font.pixelSize: parent.height*0.1
+                    anchors.top: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
     }
@@ -249,7 +258,7 @@ Rectangle {
             scale: PathView.itemScale
             z: PathView.itemZ
 
-            property int selectionBorder: 4
+            property int selectionBorder: 2
             property string gameFile: file
             property string image: menuImage
             property bool currentItem: PathView.isCurrentItem
@@ -262,15 +271,24 @@ Rectangle {
                 border.width: parent.selectionBorder
                 border.color: parent.currentItem ? "red" : "black"
                 radius: 1
-            }
 
-            AnimatedImage {
-                width: parent.width - parent.selectionBorder
-                height: parent.height - parent.selectionBorder
-                source: image
-                anchors.centerIn: parent
-                smooth: moving
-                opacity: opacityValue
+                AnimatedImage {
+                    width: parent.width - parent.border.width
+                    height: parent.height - parent.border.width
+                    anchors.centerIn: parent
+                    source: image
+                    smooth: moving
+                    opacity: opacityValue
+                    z: parent.z - 1
+                }
+
+                Text {
+                    text: name
+                    color: "white"
+                    font.pixelSize: parent.height*0.1
+                    anchors.top: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
     }
