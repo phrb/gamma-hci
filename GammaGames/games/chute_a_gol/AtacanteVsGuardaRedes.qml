@@ -169,16 +169,19 @@ Rectangle {
     SoundEffect {
         id: chute
         source: "sons/kick.wav"
+        volume: 0.5
     }
 
     SoundEffect {
         id: golo_som
         source: "sons/goal.wav"
+        volume: 0.5
     }
 
     SoundEffect {
         id: golo_falhado_som
         source: "sons/miss.wav"
+        volume: 0.5
     }
 
 }

@@ -131,12 +131,13 @@ GammaGame {
         SoundEffect {
             id: apito
             source: "sons/apito.wav"
+            volume: 0.3
         }
 
         SoundEffect {
             id: torcida
             source: "sons/publico.wav"
-            volume: 0.5
+            volume: 0.3
             loops: SoundEffect.Infinite
         }
 
