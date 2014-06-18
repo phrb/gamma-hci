@@ -24,6 +24,7 @@ Rectangle{
     SoundEffect {
         id: explosion
         source: "efeitos_sonoros/explosion.wav"
+        volume: 0.3
         onPlayingChanged: {
             if (!playing) {
                 spaceInvaders.currentAliens--;

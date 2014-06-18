@@ -75,6 +75,7 @@ Rectangle {
     SoundEffect {
         id: playSound
         source: selectSound
+        volume: 0.3
     }
 
     AnimatedImage {
