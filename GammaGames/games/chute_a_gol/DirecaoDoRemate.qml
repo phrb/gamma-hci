@@ -1,18 +1,17 @@
 import QtQuick 2.2
 
-Item {
+Rectangle {
     id: raiz
     property real direcao: 0
     property bool rodar: false
+    height: 70
+    width: 200
+    color:"transparent"
 
     Image {
-        id: direcao
-        height: 70
-        width: 270
-        source: "imagens/direcao.png"
-        z:0
-        x:0
-        y:0
+        id: direcao    
+        source: "imagens/direcao2.png"
+        anchors.fill: parent
     }
 
     Image {
@@ -34,13 +33,13 @@ Item {
 
     onRodarChanged: {
         if (raiz.rodar === false){
-            raiz.direcao = seletor.x
+            raiz.direcao = seletor.x/direcao.width
         }
     }
 
     function reiniciar(){
         raiz.direcao = 0
-        raiz.rodar = false
         seletor.x = (direcao.width - seletor.width)/2
+        raiz.rodar = true
     }
 }

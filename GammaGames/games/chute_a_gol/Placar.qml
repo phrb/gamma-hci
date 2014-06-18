@@ -8,7 +8,7 @@ Rectangle {
     height: 180
     color: "transparent"
     state: "placar0"
-    property string texto: "Jogador"
+    property string texto: "Placar"
     property int golos_marcados: 0
     property int golos_falhados: 0
     property int penaltisMarcados: 0
@@ -23,10 +23,9 @@ Rectangle {
         Text {
             anchors.centerIn: parent
             text: placar.texto
-            color: "green"
+            color: "black"
             font.pointSize: 20
-            style: Text.Outline
-            styleColor: "yellow"
+            font.bold: true
         }
     }
 
@@ -38,13 +37,11 @@ Rectangle {
         height: 60
         color: "transparent"
         Text {
-            anchors.top: parent.top
-            anchors.topMargin: 10
-            text: "Golos Marcados: " + placar.golos_marcados
-            color: "green"
-            font.pointSize: 10
-            style: Text.Outline
-            styleColor: "yellow"
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Golos: " + placar.golos_marcados
+            color: "black"
+            font.pointSize: 15
+            font.bold: true
         }
     }
 
@@ -56,13 +53,11 @@ Rectangle {
         height: 60
         color: "transparent"
         Text {
-            anchors.top: parent.top
-            anchors.topMargin: 10
-            text: "Golos Falhados: " + placar.golos_falhados
-            color: "green"
-            font.pointSize: 10
-            style: Text.Outline
-            styleColor: "yellow"
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Falhas: " + placar.golos_falhados
+            color: "black"
+            font.pointSize: 15
+            font.bold: true
         }
     }
 
@@ -73,6 +68,7 @@ Rectangle {
         width: 60
         height: 60
         radius: 30
+        border.width: 2
         color: "grey"
         property bool gol: false
     }
@@ -84,6 +80,7 @@ Rectangle {
         width: 60
         height: 60
         radius: 30
+        border.width: 2
         color: "grey"
         property bool gol: false
     }
@@ -95,6 +92,7 @@ Rectangle {
         width: 60
         height: 60
         radius: 30
+        border.width: 2
         color: "grey"
         property bool gol: false
     }
@@ -106,6 +104,7 @@ Rectangle {
         width: 60
         height: 60
         radius: 30
+        border.width: 2
         color: "grey"
         property bool gol: false
     }
@@ -117,6 +116,7 @@ Rectangle {
         width: 60
         height: 60
         radius: 30
+        border.width: 2
         color: "grey"
         property bool gol: false
     }
@@ -252,20 +252,23 @@ Rectangle {
         status5.gol = false
     }
 
+    Timer {
+        id: tempo_de_espera
+        interval: 2000
+        onTriggered: campo.novoPenalty()
+    }
+
     onPenaltisMarcadosChanged: {
         if (placar.penaltisMarcados < 5) {
-            campo.novoPenalty()
-            computador_placar.atualizacao(Math.ceil((Math.random()*2)) > 1 ? true : false)
+            tempo_de_espera.restart()
         } else {
-            computador_placar.atualizacao(Math.ceil((Math.random()*2)) > 1 ? true : false)
-            if (jogador_placar.golos_marcados > computador_placar.golos_marcados){
+            if (jogador_placar.golos_marcados > jogador_placar.golos_falhados){
                 sair.texto = "Venceste!"
-            } else if (jogador_placar.golos_marcados < computador_placar.golos_marcados){
+            } else if (jogador_placar.golos_marcados < jogador_placar.golos_falhados){
                 sair.texto = "Perdeste!"
             } else {
                 sair.texto = "Empataste!"
             }
-            campo.novoPenalty()
             campo.state = "ResultadoFinal"
         }
     }

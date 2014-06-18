@@ -1,5 +1,6 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
+import QtMultimedia 5.0
 import "../../api"
 
 GammaGame {
@@ -9,17 +10,14 @@ GammaGame {
     function button1() {
         if (campo.state === "ResultadoFinal"){
             campo.state = "MarcacaoDePenaltis"
+            campo.novoPenalty()
             jogador_placar.reiniciar()
-            computador_placar.reiniciar()
         } else {
             if (intensidade_remate.rodar === true){
                 intensidade_remate.rodar = false
                 penalty.intensidade = intensidade_remate.intensidade
                 penalty.rodar = true
-            } else if (altura_remate.rodar === true) {
-                altura_remate.rodar = false
-                direcao_remate.rodar = true
-                penalty.altura = altura_remate.altura
+                apito.play();
             } else if (direcao_remate.rodar === true){
                 intensidade_remate.rodar = true
                 direcao_remate.rodar = false
@@ -36,8 +34,8 @@ GammaGame {
     Item{
         id: campo
         anchors.fill: parent
-        width: 1000
-        height: 600
+        width: parent.width
+        height: parent.height
         property bool marcandoPenaltis: true
         property int numeroDeGolosDoJogador: 0
         property int numeroDeGolosDoComputador: 0
@@ -45,8 +43,6 @@ GammaGame {
         // Imagem do relvado
         Image {
             id: relvado
-            width: 1000
-            height: 600
             anchors.fill: parent
             source: "imagens/campo.png"
             z:0
@@ -57,49 +53,52 @@ GammaGame {
             anchors.centerIn: parent
             z:-1
         }
+        Golo{
+            id: animacao_golo
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width * 0.05
+            state: "antes_do_penalty"
+            chute: true
+        }
         // Adicionando os placares de jogo
-        Placar{ // Placar do Jogador1
+        Placar{ // Placar do Jogador
             id: jogador_placar
-            x:40
-            y:7
-            texto: "Jogador"
-        }
-        Placar{ // Placar do Jogador2
-            id: computador_placar
-            x:950
-            y:7
-            texto: "Computador"
-        }
-        // Adicionando o seletor da altura do remate
-        AlturaDoRemate{
-            id: altura_remate
-            x:200
-            y:600
-            rodar: true
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width * 0.05
         }
         // Adicionando o seletor da direcao do remate
         DirecaoDoRemate{
             id: direcao_remate
-            x:520
-            y:605
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: parent.height * 0.05
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width * 0.05
         }
         // Adicionando o seletor da intensidade do remate
         IntensidadeDoRemate{
             id: intensidade_remate
-            x:950
-            y:575
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: parent.height * 0.05
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width * 0.05
         }
         // Adicionando o jogador que vai marcar o penalty
         AtacanteVsGuardaRedes{
             id: penalty
-            x:650
-            y:398
+            width: parent.width * 0.3
+            height: parent.height * 0.75
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.095
+            anchors.left: parent.left
+            anchors.leftMargin: (parent.width - penalty.width + 50)/2
         }
 
         function novoPenalty(){
-            altura_remate.reiniciar()
             direcao_remate.reiniciar()
             intensidade_remate.reiniciar()
+            animacao_golo.reiniciar()
             penalty.reiniciar()
         }
 
@@ -111,7 +110,7 @@ GammaGame {
                     z:-1
                 }
                 PropertyChanges {
-                    target:altura_remate
+                    target:direcao_remate
                     rodar: true
                 }
 
@@ -123,21 +122,26 @@ GammaGame {
                     z:1
                 }
                 PropertyChanges {
-                    target:altura_remate
+                    target:direcao_remate
                     rodar: false
                 }
             }
         ]
 
-        /*transitions: [
-            Transition {
-                from: "MarcacaoDePenaltis"
-                to: "ResultadoFinal"
-            },
-            Transition {
-                from: "ResultadoFinal"
-                to: "MarcacaoDePenaltis"
-            }
-        ]*/
+        SoundEffect {
+            id: apito
+            source: "sons/apito.wav"
+        }
+
+        SoundEffect {
+            id: torcida
+            source: "sons/publico.wav"
+            volume: 0.5
+            loops: SoundEffect.Infinite
+        }
+
+        Component.onCompleted: {
+            torcida.play();
+        }
     }
 }
