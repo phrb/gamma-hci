@@ -19,11 +19,9 @@ Rectangle {
         z: zMouse
         enabled: true
         onPressed: {
-            if (!screen.clicked) {
-                screen_mousearea.enabled = false;
-                var menuInFocus = parent.state === "tag" ? carousel_tag : carousel_game;
-                menuInFocus.action();
-            }
+            screen_mousearea.enabled = false;
+            var menuInFocus = parent.state === "tag" ? carousel_tag : carousel_game;
+            menuInFocus.action();
         }
     }
 
