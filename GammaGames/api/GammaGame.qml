@@ -17,7 +17,8 @@ import QtQuick 2.2
   button2() in her code.
  */
 Rectangle {
-    property int timeout_seconds: 10
+    property int timeout_seconds: 40
+    property int zTimeout: 999999
 
     Rectangle {
         id: timeout_bar
@@ -26,8 +27,23 @@ Rectangle {
         width: parent.width
         height: 20
         opacity: 0
-        z: 999999
+        z: zTimeout
         color: "red"
+
+        function reset() {
+            timeout_timer.ticks = 0;
+            timeout_bar.opacity = 0;
+            timeout_bar.width = parent.width
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        z: zTimeout + 1
+        onPressed: {
+            button1();
+            timeout_bar.reset();
+        }
     }
 
     function escape_key (){
@@ -41,6 +57,7 @@ Rectangle {
     color: "black"
     anchors.fill: parent
     focus: true
+
     Timer {
         id: timeout_timer
         interval: timeout_seconds * 1000 / 100; running: true;
@@ -62,12 +79,14 @@ Rectangle {
             }
         }
     }
-    Keys.onReleased: {
-        timeout_timer.ticks = 0;
-        timeout_bar.opacity = 0;
-        timeout_bar.width = parent.width
-    }
+
     Keys.onEscapePressed: escape_key()
-    Keys.onSpacePressed: button1() // Digit0: Provisory bindings for Button1.
-    Keys.onDigit1Pressed: button2() // Digit1: Provisory bindings for Button2.
+    Keys.onSpacePressed: {
+        button1();
+        timeout_bar.reset();
+    }
+    Keys.onDigit1Pressed: {
+        button2();
+        timeout_bar.reset();
+    }
 }

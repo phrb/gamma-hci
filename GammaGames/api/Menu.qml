@@ -9,8 +9,22 @@ Rectangle {
     color: "black"
     state: sceneLoader.lastChosenGameIndex === -1 ? "tag" : "game";
 
-    property int rotate_time: 1500
+    property int rotate_time: 2500
     property string selectSound: "menu.wav"
+    property int zMouse: 999999
+    property bool clicked: false;
+
+    MouseArea {
+        anchors.fill: parent
+        z: zMouse
+        onPressed: {
+            if (!screen.clicked) {
+                screen.clicked = true;
+                var menuInFocus = parent.state === "tag" ? carousel_tag : carousel_game;
+                menuInFocus.action();
+            }
+        }
+    }
 
     GameList {
         id: gammaGameList
@@ -25,6 +39,7 @@ Rectangle {
                 carousel_game.focus = true;
                 rotateTimer.carousel = carousel_game;
                 rotateTimer.start();
+                screen.clicked = false;
             }
         },
         State {
@@ -36,6 +51,7 @@ Rectangle {
                 carousel_tag.focus = true;
                 rotateTimer.carousel = carousel_tag;
                 rotateTimer.start();
+                screen.clicked = false;
             }
         }
     ]
@@ -82,14 +98,16 @@ Rectangle {
         id: preview
         opacity: 0
         z: 0
+        property int chosenIndex: -1
+        property string gameFile: ""
 
         states: [
             State {
                 name: "expanded"
                 PropertyChanges { target: preview; opacity: 1; x: (width*scale-width)/2.0; y: (height*scale-height)/2.0; z: 100; width: screen.width/scale; height: screen.height/scale }
                 onCompleted: {
-                    sceneLoader.lastChosenGameIndex = carousel_game.currentIndex;
-                    sceneLoader.source = carousel_game.currentItem.gameFile
+                    sceneLoader.lastChosenGameIndex = preview.chosenIndex;
+                    sceneLoader.source = preview.gameFile
                 }
             }
         ]
@@ -115,15 +133,7 @@ Rectangle {
         anchors.centerIn: screen
 
         Keys.onEscapePressed: Qt.quit()
-        Keys.onSpacePressed: {
-            playSound.play();
-            focus = false;
-            rotateTimer.stop();
-            sceneLoader.lastChosenTagIndex = currentIndex;
-            screen.state = "game";
-            carousel_game.currentIndex = 0;
-            carousel_game.model = currentItem.games;
-        }
+        Keys.onSpacePressed: action()
 
         path: Ellipse {
             width: carousel_tag.width
@@ -146,6 +156,16 @@ Rectangle {
                 focus: true
             }
         }
+
+        function action() {
+            playSound.play();
+            focus = false;
+            rotateTimer.stop();
+            sceneLoader.lastChosenTagIndex = currentIndex;
+            screen.state = "game";
+            carousel_game.currentIndex = 0;
+            carousel_game.model = currentItem.games;
+        }
     }
 
     PathView {
@@ -159,24 +179,7 @@ Rectangle {
         anchors.centerIn: screen
 
         Keys.onEscapePressed: Qt.quit()
-        Keys.onSpacePressed: {
-            playSound.play();
-            focus = false;
-            rotateTimer.stop();
-
-            if (currentItem.objectName === "Voltar" && currentItem.file === undefined) {
-                screen.state = "tag";
-            }
-            else {
-                preview.source = currentItem.image;
-                preview.width = currentItem.width;
-                preview.height = currentItem.height;
-                preview.scale = currentItem.scale;
-                preview.y = carousel_tag.y + currentItem.y;
-                preview.x = carousel_tag.x + currentItem.x;
-                preview.state = "expanded";
-            }
-        }
+        Keys.onSpacePressed: action()
 
         path: Ellipse {
             width: carousel_game.width
@@ -197,6 +200,27 @@ Rectangle {
                 opacity = 1
                 z: 10
                 focus: true
+            }
+        }
+
+        function action() {
+            playSound.play();
+            focus = false;
+            rotateTimer.stop();
+
+            if (currentItem.objectName === "Voltar" && currentItem.file === undefined) {
+                screen.state = "tag";
+            }
+            else {
+                preview.chosenIndex = currentIndex;
+                preview.gameFile = currentItem.gameFile;
+                preview.source = currentItem.image;
+                preview.width = currentItem.width;
+                preview.height = currentItem.height;
+                preview.scale = currentItem.scale;
+                preview.y = carousel_tag.y + currentItem.y;
+                preview.x = carousel_tag.x + currentItem.x;
+                preview.state = "expanded";
             }
         }
     }
