@@ -12,14 +12,15 @@ Rectangle {
     property int rotate_time: 2500
     property string selectSound: "menu.wav"
     property int zMouse: 999999
-    property bool clicked: false;
 
     MouseArea {
+        id: screen_mousearea
         anchors.fill: parent
         z: zMouse
+        enabled: true
         onPressed: {
             if (!screen.clicked) {
-                screen.clicked = true;
+                screen_mousearea.enabled = false;
                 var menuInFocus = parent.state === "tag" ? carousel_tag : carousel_game;
                 menuInFocus.action();
             }
@@ -39,7 +40,7 @@ Rectangle {
                 carousel_game.focus = true;
                 rotateTimer.carousel = carousel_game;
                 rotateTimer.start();
-                screen.clicked = false;
+                screen_mousearea.enabled = true;
             }
         },
         State {
@@ -51,7 +52,7 @@ Rectangle {
                 carousel_tag.focus = true;
                 rotateTimer.carousel = carousel_tag;
                 rotateTimer.start();
-                screen.clicked = false;
+                screen_mousearea.enabled = true;
             }
         }
     ]
